@@ -38,7 +38,7 @@ module.exports = function verifyFactory({
 	const err = {};
 	const prefix = getPrefix(pathToCheckfile);
 	const status = [false, [], [], err, prefix];
-	(promiseChecklistBuffer
+	(promiseChecklistBuffer(pathToCheckfile)
 	 .then((buffer)=>(buffer.toString('utf8')))
 	 .then((jsonstring)=>(JSON.parse(jsonstring)))
 	 .then((checkJSON)=>{
