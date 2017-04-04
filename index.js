@@ -27,10 +27,14 @@ function FileVerificationError(obj){
 FileVerificationError.prototype = Object.create(Error.prototype);
 FileVerificationError.prototype.constructor = FileVerificationError;
 
+function getBaseName(filepath){
+    const dirRegex = /^.*\//;
+    return filepath.replace(dirRegex,'');
+}
+
 module.exports = function verifyFactory({
     promiseChecklistBuffer,
     promiseActual,
-    getBaseName,
     getPrefix,
     fastFail
 }){
@@ -42,10 +46,11 @@ module.exports = function verifyFactory({
 	 .then((buffer)=>(buffer.toString('utf8')))
 	 .then((jsonstring)=>(JSON.parse(jsonstring)))
 	 .then((checkJSON)=>{
-	     function promiseCompare(f){
+	     function promiseCompare(fInChecklist){
+		 const f = getBaseName(fInChecklist);
 		 return (promiseActual(prefix,f,options)
 			 .then( (actual)=> {
-			     const expected = checkJSON[f];
+			     const expected = checkJSON[fInChecklist];
 			     if (actual===expected){
 				 status[1].push(f);
 				 return true;
@@ -62,7 +67,7 @@ module.exports = function verifyFactory({
 			 })
 			     );
 	     } // ends inner function promiseCompare(f)
-	     const files = Object.keys(checkJSON).sort().map(getBaseName);
+	     const files = Object.keys(checkJSON);
 	     const promises = files.map(promiseCompare);
 	     return (Promise
 		     .all(promises)
