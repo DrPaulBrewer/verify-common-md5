@@ -20,8 +20,8 @@ function FileVerificationError(obj){
     this.stack = (new Error()).stack;
     this.actual = obj.actual;
     this.expected = obj.expected;
-    this.file = obj.file;
-    this.prefix = obj.prefix;
+    if (obj.file) this.file = obj.file;
+    if (obj.prefix) this.prefix = obj.prefix.toString();
 }
 
 FileVerificationError.prototype = Object.create(Error.prototype);
@@ -34,16 +34,16 @@ module.exports = function verifyFactory({
     getPrefix,
     fastFail
 }){
-    return function(pathToCheckfile){
+    return function(pathToCheckfile, options){
 	const err = {};
 	const prefix = getPrefix(pathToCheckfile);
-	const status = [false, [], [], err, prefix];
-	(promiseChecklistBuffer(pathToCheckfile)
+	const status = [false, [], [], err, prefix.toString()];
+	(promiseChecklistBuffer(pathToCheckfile, options)
 	 .then((buffer)=>(buffer.toString('utf8')))
 	 .then((jsonstring)=>(JSON.parse(jsonstring)))
 	 .then((checkJSON)=>{
 	     function promiseCompare(f){
-		 return (promiseActual(prefix,f)
+		 return (promiseActual(prefix,f,options)
 			 .then( (actual)=> {
 			     const expected = checkJSON[f];
 			     if (actual===expected){
