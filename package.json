@@ -1,6 +1,6 @@
 {
   "name": "verify-common-md5",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Common code for verify-bucket-md5 and verify-fsdir-md5",
   "main": "index.js",
   "repository": {
@@ -13,6 +13,5 @@
     "url": "https://github.com/drpaulbrewer/verify-common-md5/issues"
   },
   "homepage": "https://github.com/drpaulbrewer/verify-common-md5#readme",
-  "dependencies": {
-  }
+  "dependencies": {}
 }
