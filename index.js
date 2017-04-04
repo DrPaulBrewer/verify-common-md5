@@ -68,8 +68,8 @@ module.exports = function verifyFactory({
 		     .all(promises)
 		     .then(()=>{
 			 status[0]=(status[1].length===files.length);
-			 if (status[1].length>2) status[1].sort();
-			 if (status[2].length>2) status[2].sort();
+			 if (status[1].length>1) status[1].sort();
+			 if (status[2].length>1) status[2].sort();
 			 return status;
 		     })
 		    );
